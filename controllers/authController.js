@@ -8,9 +8,15 @@ const crypto = require('crypto'); // to generate OTP
 const register = async (req, res) => {
 
     // console.log('Registration request received:', req.body);
+    const existingEmail = await User.findOne({email: req.body.email})
+    if(existingEmail) {
+        return res.status(StatusCodes.BAD_REQUEST).json({message: `Email ${req.body.email} already exists`})
+    }
     const user = await User.create({...req.body}) 
     // const token = user.createJWT()
     res.status(StatusCodes.CREATED).json({message: "User Created Sucessfully" , user: {user}})
+
+    
 }
 
 const login = async (req, res) => {
