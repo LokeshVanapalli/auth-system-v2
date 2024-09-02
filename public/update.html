@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Password</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Include SweetAlert2 CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+</head>
+<body>
+    <div class="wrapper">
+        <div class="form-container">
+
+            <div id="message" style="color: red; margin-bottom: 20px;"></div>
+
+        <!-- updating new password -->
+            <form action="" class="form register-form" style="display: contents; " onsubmit="updateUser(); return false;">
+                <h1>Update Password</h1>
+                <div class="input-box">
+                <input type="password" placeholder="New Password" required id="update-password">
+                <i class='bx bx-hide toggle-password' data-target="#update-password" style="width: fit-content;"></i>
+                </div>
+        
+                <div class="input-box">
+                <input type="password" placeholder="Confirm Password" required id="update-confirm-password">
+                <i class='bx bxs-lock-alt'></i>
+                <!-- <i class='bx bx-hide toggle-password' data-target="#register-password" style="width: fit-content;"></i> -->
+                </div>
+                <button type="submit" class="btn" >Update</button>
+            </form>
+        </div>
+    </div>
+    
+</body>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+        togglePasswordIcons.forEach(icon => {
+            icon.addEventListener('click', () => {
+            const target = document.querySelector(icon.getAttribute('data-target'));
+            const type = target.getAttribute('type') === 'password' ? 'text' : 'password';
+            target.setAttribute('type', type);
+            icon.classList.toggle('bx-hide');
+            icon.classList.toggle('bx-show');
+            });
+        });
+    })
+
+    //check link is expired or not
+    let updateEmail = "";
+    let updateToken = "";
+    async function fetchMe() {
+        const urlParams = new URLSearchParams(window.location.search)
+        updateToken = urlParams.get('token')
+        if(updateToken === null || updateToken === undefined || !updateToken){
+            // alert("Invalid link")
+            // console.log("invalod linkk")
+            // setTimeout(() => {
+            //     window.location.href = "/"
+            // }, 1000)
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid link',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = '/';
+            });
+        } else {
+            
+            try {
+                const response = await fetch(`/api/v2/auth/verify-reset-token?token=${updateToken}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                const data = await response.json()
+                if(response.status === 401){
+                    alert(data.message)
+                    window.location.href = '/'
+                } else if( response.status === 200){
+                    updateEmail = data.email
+                }
+            } catch (error) {
+                console.log(error)
+                console.log("Error in Token data fetching")
+            }
+        }
+    }
+
+    fetchMe()
+    async function updateUser() {
+        let updatePass = document.getElementById('update-password').value
+        let updateConfirmPass = document.getElementById('update-confirm-password').value
+        
+        try {
+            const response = await fetch('/api/v2/auth/update', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                    password: updatePass,
+                    confirmPassword: updateConfirmPass,
+                    email: updateEmail,
+                    token: updateToken
+                    })
+                })
+
+            const data = await response.json()
+            if(response.status === 200){
+                // alert(data.message)
+                // window.location.href = '/'
+
+                Swal.fire({
+                    title: 'Success!',
+                    text: data.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '/';
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                })
+            }
+        } catch (error) {
+            console.log('Error in update password')
+        }
+
+        // console.log(updatePass)
+        // console.log(updateConfirmPass)
+    }
+    </script>
+</html>

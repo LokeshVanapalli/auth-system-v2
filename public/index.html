@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Sign Up Form | Dan Aleko</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Include SweetAlert2 CSS and JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <script src="./script.js"></script>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="form-container">
+      <!-- login form -->
+      <form action="" class="form login-form" onsubmit="loginUser(); return false;">
+        <h1>Login</h1>
+        <div class="input-box">
+          <input type="email" placeholder="Email" id="login-email" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+          <input type="password" placeholder="Password" required id="login-password">
+          <i class='bx bx-hide toggle-password' data-target="#login-password" style="width: fit-content;"></i>
+        </div>
+        <div class="remember-forgot">
+          <label><input type="checkbox" id="rememberMe">Remember Me</label>
+          <a href="#" id="show-forgot-password">Forgot Password</a>
+        </div>
+        <button type="submit" class="btn" >Login</button>
+        <div class="register-link">
+          <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+        </div>
+      </form>
+
+      <!-- registation form -->
+      <form action="" class="form register-form" onsubmit="registerUser(); return false;">
+        <h1>Register</h1>
+        <div class="input-box">
+          <input type="text" placeholder="Full Name" id="reg-name" required>
+          <i class='bx bxs-user'></i>
+        </div>
+        <div class="input-box">
+          <input type="email" placeholder="Email" id="reg-email" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        <div class="input-box">
+          <input type="password" placeholder="Password" required id="register-password">
+          <i class='bx bx-hide toggle-password' data-target="#register-password" style="width: fit-content;"></i>
+        </div>
+        <button type="submit" class="btn" >Sign Up</button>
+        <div class="register-link">
+          <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+        </div>
+      </form>
+
+      <!-- forget password form -->
+      <form action="" class="form forgot-password-form">
+        <h1>Forgot Password</h1>
+        <div class="input-box">
+          <input type="email" placeholder="Email" id="forget-email" required>
+          <i class='bx bxs-envelope'></i>
+        </div>
+        
+        <button type="button" class="btn" id="send-otp" style="margin-bottom: 30px;" onclick="forgetPassword()">Send OTP</button>
+        
+        <div class="otp-boxes">
+          <input type="text" class="otp-box otp_num_1" maxlength="1" pattern="\d*" required>
+          <input type="text" class="otp-box otp_num_2" maxlength="1" pattern="\d*" required>
+          <input type="text" class="otp-box otp_num_3" maxlength="1" pattern="\d*" required>
+          <input type="text" class="otp-box otp_num_4" maxlength="1" pattern="\d*" required>
+          <input type="text" class="otp-box otp_num_5" maxlength="1" pattern="\d*" required>
+          <input type="text" class="otp-box otp_num_6" maxlength="1" pattern="\d*" required>
+        </div>
+        <div class="msg-sucess" style="margin-bottom: 0px;">
+          <p>OTP verified sucessfully </p>
+        </div>
+        <div class="msg-failed" style="margin-bottom: 0px;">
+          <p>OTP invalid </p>
+        </div>
+        <button type="button" class="btn" id="verify-otp" style="margin: 30px 0px 15px 0px;" onclick="verifyOTP();">verify OTP</button>
+        <div class="register-link">
+          <p>Remember your password? <a href="#" id="show-login-from-forgot">Login</a></p>
+        </div>
+      </form>
+
+      <!-- updating new password -->
+      <form action="" class="form register-form" style="display: none; " onsubmit="updateUser(); return false;">
+        <h1>Update Password</h1>
+        <div class="input-box">
+          <input type="password" placeholder="New Password" required id="update-password">
+          <i class='bx bx-hide toggle-password' data-target="#update-password" style="width: fit-content;"></i>
+        </div>
+
+        <div class="input-box">
+          <input type="password" placeholder="Confirm Password" required id="update-confirm-password">
+          <i class='bx bxs-lock-alt'></i>
+          <!-- <i class='bx bx-hide toggle-password' data-target="#register-password" style="width: fit-content;"></i> -->
+        </div>
+        <button type="submit" class="btn" >Update</button>
+      </form>
+
+
+    </div>
+  </div>
+
+
+</body>
+</html>
